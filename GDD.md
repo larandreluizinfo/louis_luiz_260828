@@ -1,139 +1,114 @@
-# GDD — Crônicas de Aeryth: O Legado da Lua Quebrada
+# GDD — Cidade Sitiada: Polícia vs Bandido
 
 ## 1. Tipo de jogo
 
-**Aventura/RPG em 2D** com foco narrativo e progressão de personagem.
+**Shooter em 3ª/1ª pessoa, mundo aberto realista + modo história**, com classes jogáveis.
 
-- Combate por turnos em arena lateral com posicionamento (1 ação + 1 movimento).
-- Exploração, diálogos ramificados, missões secundárias e enigmas ambientais.
-- Sistemas de RPG: XP/níveis, habilidades passivas e ativas, equipamentos,
-  inventário e status elementais.
-- Plataformas-alvo: PC (teclado/mouse) e gamepad (controle opcional).
+- **Modo Mundo Aberto:** mapa urbano + zona rural livre, com polícia e bandidos (NPCs e players), lojas, garagens, hospital, banco central, aeroporto.
+- **Modo História:** campanha em capítulos com objetivos, escolhas de lado (Polícia ou Bandido) e 3 finais.
+- Plataformas-alvo: PC (teclado/mouse) e gamepad. Sem morte permanente na história.
 
-## 2. Personagem principal
+## 2. Arsenal
 
-**Lírio** — jovem cartógrafo/a de 17 anos da vila de Aldebae.
+Todas as armas têm recuo, dispersão, som e dano por distância realistas. Munição por calibre.
 
-**Personalidade**
-- Curioso(a) e corajoso(a), mas ingênuo(a) e atrapalhado(a) em situações sociais.
-- Lealdade forte à vila; carrega um mapa queimado herdado de seu mentor.
+| Arma | Tipo | Dano | Cadência | Alcance | Pente | Recarga | Calibre | Preço na loja |
+|------|------|------|----------|---------|-------|---------|---------|---------------|
+| Glock 17 | Pistola | 22 | Semi-auto | Curto (30m) | 17 | 1,4s | 9mm | R$ 800 inicial |
+| P90 | SMG | 24 | 900 rpm | Curto-médio (60m) | 50 | 2,2s | 5.7mm | R$ 4.500 |
+| UMP-45 | SMG | 30 | 650 rpm | Médio (70m) | 25 | 2,0s | .45 | R$ 5.200 |
+| AK-47 | Fuzil de assalto | 42 | 600 rpm | Longo (150m) | 30 | 2,5s | 7.62mm | R$ 9.000 |
+| Groza | Fuzil bullpup | 45 | 750 rpm | Longo (140m) | 30 | 2,6s | 7.62mm | R$ 12.000 (loja nível 2 / drop raro) |
+| Calibre 12 "Dose" | Escopeta | 8x12 (perdigotos) | Pump 70 rpm | Muito curto (20m) | 6 | 2,8s | 12ga | R$ 3.000 |
+| AWM | Sniper bolt-action | 110 | 40 rpm | Muito longo (400m) | 5 | 3,5s | .300 Magnum | R$ 18.000 (loja nível 3 / missão) |
 
-**Habilidades iniciais**
-- "Olho do Cartógrafo": revela rotas ocultas, tesouros e fraquezas de inimigos.
-- Golpe de Espada Rúnica (básico), Defesa Total, e Tocha Espiritual (luz).
+- **Acessórios:** mira red dot/holográfica/4x/8x (AWM), silenciador, coronha, empunhadura (reduz recuo), pente estendido.
+- **Balanceamento:** escopeta domina perto, SMGs no médio-curto, AK/Groza no médio-longo, AWM one-shot no torso/cabeça com colete 1, mas lenta e barulhenta.
 
-**Árvore de evolução (3 ramos exclusivos)**
-| Ramo | Foco | Arma | Exemplos de habilidade |
-|------|------|------|------------------------|
-| Sentinela | Defesa | Espada longa + escudo | Postura de Ferro, Contra-ataque, Parede de Luz |
-| Feérico | Magia | Cajado de estrelas | Cintilância, Bênção Lunar, Cometa do Amanhecer |
-| Batedor | Agilidade | Lança / adagas | Passo de Sombra, Flecha Prateada, Emboscada |
+## 3. Classes
 
-O jogador escolhe o ramo no início do Ato 2; pontos de nível continuam
-podendo ser distribuídos entre os ramos secundários.
+O jogador escolhe no início e pode trocar no esconderijo/DP a cada capítulo (mantém nível, perde wanted/reputação parcial).
 
-## 3. Cenário
+### 3.1 Bandido
+- **Foco:** roubo, fuga, confronto com polícia.
+- **Habilidades:** Arrombamento rápido, Suborno (reduz wanted 1 estrela), Pilotagem +10%, Carga extra (+2 slots).
+- **Progressão:** Reputação do Morro (missões de roubo, entrega, fuga). Desbloqueia esconderijos, Groza e Calibre 12 com desconto.
+- **Wanted:** 0–5 estrelas. 4+ = BOPE/helicóptero no mundo aberto.
 
-O mundo de **Aeryth** é uma cadeia de ilhas e territórios unidos pela antiga
-**Corrente de Prata** (estradas de maré entre regiões). A capital **Mirarune**
-era o coração de uma civilização lunar que agora está se apagando.
+### 3.2 Polícia
+- **Foco:** patrulha, abordagem, prisão e apreensão.
+- **Habilidades:** Colete reforçado (+25 HP inicial), Chamada de reforço, Abordagem (prende NPC procurado sem matar = bônus), Direção defensiva.
+- **Progressão:** Patente (Soldado → Cabo → Sargento → BOPE). Desbloqueia AWM, UMP e viaturas especiais.
+- **Corrupção (história):** escolhas podem dar dinheiro extra mas travam final "honrado".
 
-**Regiões do jogo**
+Ambas as classes usam todas as armas; o que muda é economia, missões e habilidades.
 
-| # | Região | Tema | Função |
-|---|--------|------|--------|
-| 1 | Aldebae | Aldeia de pescadores | Tutorial / hub inicial |
-| 2 | Floresta de Sombreverde | Bosque denso e lacustre | Primeiros combates e enigmas |
-| 3 | Ruínas do Observatório Celeste | Ruínas astronômicas | Enigma-chave e 1º chefe |
-| 4 | Montanhas de Karyth | Trilhas e cavernas geladas | Escalada e chefes intermediários |
-| 5 | Deserto das Areias Cinzas | Ruínas milenares soterradas | Missões secundárias e lore |
-| 6 | A Fenda da Lua | Reino distorcido pelo Vazio | Ato final e chefão |
+## 4. Modos
 
-Cada região tem irmã noturna/alterada (versão "absorvida pelo Vazio") que
-abre conteúdo opcional pós-fragmento.
+### 4.1 Modo Mundo Aberto
+- Mapa único contínuo (~4x4 km): centro, favela/morro, porto, rodovia, fazendas, aeroporto.
+- Ciclo dia/noite, chuva, NPCs e trânsito dinâmicos.
+- Atividades livres: patrulha/entrega, racha de moto, tiro ao alvo, loja de armas, garagem, hospital, roubo a banco, fuga da polícia.
+- Save automático em esconderijo/DP + save rápido.
 
-## 4. Objetivo do jogador
+### 4.2 Modo História (8 capítulos)
+1. Chegada à cidade (tutorial: Glock + direção).
+2. Primeiro serviço (patrulha ou entrega).
+3. Loja de armas e primeiro fuzil (AK-47).
+4. Roubo a banco (como bandido) / Assalto a banco (como polícia) — missão espelho.
+5. Guerra do morro (UMP/P90).
+6. Contrabando no aeroporto (Groza).
+7. Sniper na rodovia (AWM + Calibre 12 em CQB).
+8. Decisão final: cerco ao banco central ou ao quartel — 3 finais (Ordem, Caos, Acordo).
 
-**Missão principal:** recolher os 6 **fragmentos da Lua Quebrada** para selar
-a **Fenda** causada pelo mago **Vasthar** e impedir o Vazio de apagar Aeryth.
+Duração estimada: 8–12h história, 20h+ com mundo aberto.
 
-Metas concretas por ato:
+## 5. Sistemas de sobrevivência e economia
 
-1. Sobreviver ao ataque do Vazio em Aldebae e partir.
-2. Aprender a usar habilidades e ativar o 1º portão-runa (Fragmento do Crepúsculo).
-3. Atravessar o Observatório e confrontar o Guardião de Prata (Fragmento do Meio-dia).
-4. Subir Karyth para recuperar o Fragmento da Alvorada.
-5. Negociar/purificar líderes corrompidos no deserto (Fragmento do Ocaso).
-6. Entrar na Fenda e decidir: selar ou redimir Vasthar (Fragmento da Lua Plena).
+- **Vida:** 100 HP + colete (50/100). Sem regen automática; precisa de cura.
+- **Kit médico:** cura 75 HP em 5s (parado). Preço R$ 300. Máx 5 no inventário.
+- **Energias (energéticos):** +stamina por 60s e cura 15 HP. Ex.: lata R$ 100. Efeito acumula 1x.
+- **Fome/cansaço leves:** só reduzem stamina, não matam — para não travar o jogo.
+- **Lojas de arma:** 3 níveis (bairro, centro, porto). Vendem armas, munição, colete, acessórios, kit médico. Bandido tem desconto no morro; polícia no arsenal do DP.
+- **Dinheiro:** missões, apreensões, roubos, vendas de carro apreendido (polícia legal) / desmanche (bandido).
 
-Vitória completa = 6 fragmentos + todos os 6 companheiros aliados recrutados.
+## 6. Roubo ao banco (sistema principal)
 
-## 5. Desafio
+Disponível no mundo aberto e no capítulo 4/8.
 
-- **Combate:** inimigos com padrões de ataque, fraquezas elementais (fogo,
-  gelo, luz, veneno) e status (queimadura, congelado, Ofuscado, envenenado).
-- **Chefes:** um por ato, com 2 a 3 fases e mecânicas próprias
-  (posicionamento, defesa cronometrada, quebra de escudo elemental).
-- **Enigmas:** constelações de projetar-se no chão, portas-runa (sequência de
-  símbolos), relógios de estrelas (alinhamento de ponteiros) e quebra-cabeças
-  de luz usando a Tocha Espiritual.
-- **Gestão de recursos:** inventário limitado (12 slots), decisões de
-  consumo de poções/equipamento e rotas alternativas que mudam a dificuldade.
-- **Dificuldade adaptativa suave:** ajuda opcional após 3 derrotas seguidas
-  no mesmo chefe (sem punição à XP).
+1. **Planejamento:** máscara, carro de fuga, hacker ou explosivo (compráveis).
+2. **Execução:** rende reféns (bônus sem matar), fura alarme em minigame, bolsa de dinheiro ocupa 4 slots e pesa (corre mais devagar).
+3. **Fuga:** wanted +2 a +4 estrelas, helicóptero se demorar >3 min, blitz na ponte.
+4. **Lavagem:** dinheiro sujo vira limpo no lava-jato/desmanche com taxa de 20%.
+5. Como polícia: mesma missão invertida — cerco, negociação, invasão tática, prisão rende mais XP que abate.
 
-## 6. Número de níveis
+## 7. Veículos realistas
 
-- **6 atos principais**, cada um com 3 a 5 sub-áreas navegáveis.
-- **+2 áreas secretas** de bônus desbloqueáveis (uma por recrutar aliado-chave).
-- 1 arena de "testes do Cartógrafo" com combate infinito por ranking.
-- Duração estimada: **12 a 18 horas** (complete content: ~22 horas).
+Física arcade-sim: peso, derrapagem, dano por parte, pneu furável, combustível.
 
-## 7. Regras principais
+- **Carros:** hatch (rápido/barato), sedan patrulha, SUV blindado, esportivo (fuga). Rádio, porta-malas (12 slots extras), blindagem 1–3.
+- **Motos:** street 160cc (ágil), trail (terra), esportiva 600cc (racha). Empina, cai em batida forte, capacete reduz 30% dano na cabeça.
+- **Avião (monomotor):** no aeroporto/deserto. Decolagem/pouso realista (flaps, trem, stall), 4 lugares, pode lançar carga (bandido) ou patrulha aérea (polícia). Sem caça/míssil — só transporte e fuga cinematográfica.
+- **Dano e reparo:** mecânico/posto cobra por peça; tanque vazio = a pé ou carona.
 
-**Combate**
-- Turnos alternados entre grupo, inimigos e aliados controlados.
-- 1 ação + 1 movimento por turno, com arena lateral de 3 faixas.
-- Fraqueza acertada = dano +50% e quebra de defesa; resistência = -50%.
+## 8. Desafio e regras
 
-**Progressão**
-- Derrotar inimigos = XP; cada fragmento desbloqueia 1 habilidade básica nova.
-- Derrota em combate = retorno ao último ponto de luz, **sem perda de XP**
-  (itens consumidos não são devolvidos).
+- **Combate:** cover real, headshot x2, colete quebra, recuo por arma, NPCs flanqueiam e chamam reforço.
+- **Dificuldade:** Recruta / Operacional / Realista (dano amigo + sem HUD de inimigo).
+- **Derrota:** história volta ao checkpoint sem perder armas; mundo aberto acorda no hospital/DP, perde 10% dinheiro sujo e munição extra.
+- **Leis do projeto:** PT-BR base, sem gore excessivo, sem morte permanente de parceiros principais, roubo nunca exige microtransação.
 
-**Mundo & escolhas**
-- Falhar um enigma nunca bloqueia a rota — há sempre caminho alternativo.
-- Diálogos alteram aliados recrutáveis, recompensas e o final.
-- 3 finais: **Paz Lunar** (padrão), **Vazio Contido** (sacrifício) e
-  **Segredo** (só com 100% de recrutamento e teste do Cartógrafo).
-- O chefe final só é acessível com os 6 fragmentos.
+## 9. Estilo visual e som
 
-**Etiquetas do projeto**
-- Todo conteúdo de texto é localizado (PT-BR como idioma base).
-- Sem morte permanente de aliados principais (falhas revertem).
+- Cidade brasileira litorânea fictícia, dia quente e noite neon.
+- Carros/motos/avião com modelos e sons realistas (motor, tiro por calibre, sirene, helicóptero).
+- HUD mínimo: vida, colete, munição, minimapa com wanted, marcador de missão.
 
-## 8. Estilo visual (cores e tema)
+## 10. Escopo mínimo jogável (MVP)
 
-**Tema**: "moonlight magic" — fantasia acolhedora com toque de melancolia,
-inspirada em aquarela e livros de contos ilustrados.
-
-**Paleta principal**
-
-| Cor | Uso |
-|-----|-----|
-| Âmbar / dourado #E8A33D | Luz da lua, calor de Aldebae, destaques de UI |
-| Verde-musgo #6B8E4E | Floresta de Sombreverde, natureza |
-| Tivela / petróleo #1F3A4F | Noite, ruínas e profundezas |
-| Púrpura profundo #4A2B6B | Vazio, magia corrompida, chefe final |
-| Prata #C9D6E8 | Lua, fragmentos, magia pura e portões-runa |
-| Creme / papel envelhecido #F4EDDD | Fundo de UI e textos narrativos |
-
-**Iluminação e efeitos**
-- Contraste constante entre a luz prateada da lua e as sombras roxas do Vazio.
-- Partículas de cintilação para magia; precipitação suave de estrelas nos atos 5-6.
-- Vitrais nas cenas de MAIS-poder (chefes) com efeito de douração.
-
-**UI e tipografia**
-- Fontes serifa leve estilo manuscrito para diálogos e títulos.
-- Ícones desenhados à mão; janelas com bordas tipo pergaminho.
-- HUD minimalista com barra de HP/MP em estilo "vitrais".
+1. Mapa quarteirão + morro + loja + banco + garagem + aeroporto.
+2. 7 armas da tabela funcionando + kit médico + energético.
+3. 2 classes com 2 habilidades cada.
+4. 1 roubo a banco jogável dos dois lados.
+5. 3 carros + 2 motos + 1 avião pilotável.
+6. Modo história cap. 1–4 + mundo aberto livre.
