@@ -1,19 +1,19 @@
-# louis_luiz_260828 — Cidade Sitiada: Polícia vs Bandido
+# Max e Robin: Aventura no Mercado
 
-Shooter em **mundo aberto realista + modo história**, com classes **Bandido e Polícia**.
+Jogo de **comércio e exploração sem violência** para **crianças e adolescentes (8 a 15 anos)**.
 
-## Destaques
+## O jogo
 
-* **Armas:** AK-47, UMP-45, AWM, P90, Glock 17, Calibre 12 "Dose", Groza (+ acessórios)
-* **Classes:** Bandido (roubo/fuga) x Polícia (patrulha/prisão), com progressão própria
-* **Modos:** Mundo Aberto livre + História em 8 capítulos com 3 finais
-* **Sistemas:** kit médico, energéticos, lojas de arma, roubo a banco, dinheiro sujo/limpo
-* **Veículos realistas:** carros, motos e avião monomotor pilotável
+* **Heróis:** Max 🧢 e Robin 🎒 (escolha um, o outro acompanha)
+* **Lugar:** Mercadão central + bairro com ruas paralelas, rotatórias, casas, prédios e parque
+* **Vender:** 🃏 cartas Pokémon, 🎮 chips de jogos, 🧸 ursinhos — compre barato, venda com lucro
+* **Missões:** 5 missões curtas até completar a coleção 🏆
+* **Realista kid:** andar com aceleração, cansaço/energia, suco 🧃, bikes 🚲, dia/noite suave, vizinhos amigos
 
-Documento completo de design: [GDD.md](GDD.md)
+Documento de design: [GDD.md](GDD.md)
 
-## Como jogar o protótipo
+## Como jogar
 
-Abra `index.html` no navegador (duplo clique) ou sirva com `python -m http.server` e acesse `http://localhost:8000`.
+Abra `index.html` no navegador (duplo clique).
 
-Escolha classe (Bandido/Polícia) e modo (Mundo Aberto/História) e clique para começar.
+Escolha Max ou Robin e clique em Jogar. Use WASD, F para falar/comprar/vender, E para suco, Q para bike.

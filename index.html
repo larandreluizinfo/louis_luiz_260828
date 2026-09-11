@@ -3,46 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cidade Sitiada: Polícia vs Bandido — Protótipo</title>
+<title>Max e Robin: Aventura no Mercado — Jogo para 8 a 15 anos</title>
 <style>
-  * { box-sizing: border-box; font-family: Arial, sans-serif; }
-  body { margin: 0; background: #111; color: #eee; display: flex; flex-direction: column; align-items: center; }
-  h1 { margin: 10px; font-size: 20px; }
-  #menu { background: #1c1c1c; border: 1px solid #444; padding: 16px; border-radius: 8px; width: 640px; max-width: 95vw; }
-  #menu button, .shopBtn { background: #E8A33D; border: none; padding: 10px 14px; margin: 4px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-  #menu button:hover { filter: brightness(1.1); }
-  #hud { width: 960px; max-width: 98vw; display: flex; gap: 10px; flex-wrap: wrap; background: #1c1c1c; padding: 8px; border-radius: 8px; margin: 6px 0; font-size: 14px; }
-  #hud span { background: #222; padding: 4px 8px; border-radius: 4px; }
-  canvas { background: #2a2f35; border: 2px solid #444; border-radius: 8px; max-width: 98vw; }
-  #msg { min-height: 22px; margin: 4px; color: #ffd97a; font-size: 14px; }
-  #shop { display: none; background: #222; border: 1px solid #E8A33D; padding: 10px; border-radius: 8px; width: 640px; max-width: 95vw; margin-bottom: 8px; }
-  #help { font-size: 12px; color: #aaa; max-width: 960px; padding: 0 10px 20px; }
-  kbd { background: #333; padding: 1px 5px; border-radius: 3px; border: 1px solid #555; }
+  * { box-sizing: border-box; font-family: "Trebuchet MS", Arial, sans-serif; }
+  body { margin: 0; background: #bfe8ff; color: #223; display: flex; flex-direction: column; align-items: center; }
+  h1 { margin: 10px; font-size: 22px; color: #0b4f7c; }
+  #menu { background: #fff; border: 3px solid #0b4f7c; padding: 16px; border-radius: 14px; width: 660px; max-width: 95vw; text-align: center; }
+  #menu button { background: #ffbf3f; border: 2px solid #0b4f7c; padding: 12px 16px; margin: 5px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 15px; }
+  #menu button:hover { filter: brightness(1.05); transform: scale(1.03); }
+  #hud { width: 960px; max-width: 98vw; display: flex; gap: 8px; flex-wrap: wrap; background: #fff; padding: 8px; border-radius: 12px; margin: 6px 0; font-size: 14px; border: 2px solid #0b4f7c; }
+  #hud span { background: #eef7ff; padding: 4px 10px; border-radius: 8px; border: 1px solid #bcd; }
+  canvas { background: #9ed48a; border: 3px solid #0b4f7c; border-radius: 14px; max-width: 98vw; }
+  #msg { min-height: 24px; margin: 4px; color: #0b4f7c; font-size: 15px; font-weight: bold; background: #fff; padding: 4px 12px; border-radius: 8px; }
+  #loja { display: none; background: #fff; border: 3px solid #ff8c42; padding: 12px; border-radius: 12px; width: 660px; max-width: 95vw; margin-bottom: 8px; }
+  #loja button { background: #7ed6a5; border: 2px solid #0b4f7c; padding: 8px 10px; margin: 4px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+  #help { font-size: 13px; color: #234; max-width: 960px; padding: 0 12px 24px; background: #fff; border-radius: 10px; margin-top: 6px; }
+  kbd { background: #0b4f7c; color: #fff; padding: 1px 6px; border-radius: 5px; }
 </style>
 </head>
 <body>
-<h1>Cidade Sitiada: Polícia vs Bandido — Protótipo Jogável</h1>
+<h1>🛍️ Max e Robin: Aventura no Mercado</h1>
 
 <div id="menu">
-  <p><b>1. Escolha a classe:</b></p>
-  <button onclick="setClass('bandido')">Bandido</button>
-  <button onclick="setClass('policia')">Polícia</button>
-  <span id="classSel">Classe: <b>bandido</b></span>
-  <p><b>2. Escolha o modo:</b></p>
-  <button onclick="startGame('aberto')">Mundo Aberto</button>
-  <button onclick="startGame('historia')">Modo História</button>
-  <p style="font-size:13px;color:#aaa">Armas: Glock, P90, UMP, AK-47, Groza, Dose (Cal.12), AWM. Sistemas: kit médico, energia, loja, banco, carros/motos/avião.</p>
+  <p><b>1. Escolha seu personagem:</b></p>
+  <button onclick="setHero('max')">🧢 Max</button>
+  <button onclick="setHero('robin')">🎒 Robin</button>
+  <span id="heroSel">Herói: <b>Max</b></span>
+  <p><b>2. Começar:</b></p>
+  <button onclick="startGame()">▶️ Jogar no Mercado</button>
+  <p style="font-size:13px">Compre e venda <b>cartas Pokémon, chips de jogos e ursinhos</b>. Explore ruas paralelas, rotatórias, casas e prédios. Sem violência — só amizade e comércio! Idade: 8 a 15 anos.</p>
 </div>
 
 <div id="hud"></div>
 <div id="msg"></div>
-<div id="shop"></div>
+<div id="loja"></div>
 <canvas id="game" width="960" height="600"></canvas>
 
 <div id="help">
-  <b>Controles:</b> <kbd>WASD</kbd> mover | <kbd>Mouse</kbd> mirar + <kbd>Clique</kbd> atirar | <kbd>1-7</kbd> trocar arma |
-  <kbd>R</kbd> recarregar | <kbd>H</kbd> kit médico | <kbd>E</kbd> energético | <kbd>F</kbd> interagir / entrar em veículo / roubar / loja |
-  <kbd>Q</kbd> sair do veículo. No avião: <kbd>W</kbd>/<kbd>S</kbd> acelerar/frear, <kbd>Espaço</kbd> decolar/pousar.
+  <b>Como jogar:</b> <kbd>WASD</kbd> / setas andar | <kbd>Shift</kbd> correr | <kbd>E</kbd> tomar suco (energia) |
+  <kbd>F</kbd> falar / comprar / vender / pegar bike / entregar | <kbd>Q</kbd> descer da bike | <kbd>M</kbd> missão atual<br>
+  💡 Dica: compre barato nas bancas do <b>MERCADO</b> e venda com lucro nas <b>casas e prédios</b>. Complete as 5 missões!
 </div>
 
 <script src="game.js"></script>
