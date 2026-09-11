@@ -11,3 +11,9 @@ Shooter em **mundo aberto realista + modo história**, com classes **Bandido e P
 * **Veículos realistas:** carros, motos e avião monomotor pilotável
 
 Documento completo de design: [GDD.md](GDD.md)
+
+## Como jogar o protótipo
+
+Abra `index.html` no navegador (duplo clique) ou sirva com `python -m http.server` e acesse `http://localhost:8000`.
+
+Escolha classe (Bandido/Polícia) e modo (Mundo Aberto/História) e clique para começar.
