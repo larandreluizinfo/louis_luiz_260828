@@ -1,6 +1,7 @@
-// Luísa e Bento: A Cabana na Floresta — jogo kid-friendly (7 a 15 anos)
-// Sem violência. Colete frutinhas, cogumelos, ervas e madeira;
-// cozinhe geléia e sopa, faça casinhas de pássaro e ajude os animais.
+// Max e Amigos: A Cabana na Floresta — jogo kid-friendly (7 a 15 anos)
+// Cinco amigos (Max, Noah, Luiza, Vitória e Matheus) numa cabana na floresta.
+// Sem violência: colete frutinhas, cogumelos, ervas e madeira; faça geléia,
+// sopa e casinhas de pássaro na garagem-oficina; ajude os bichinhos da mata.
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -22,42 +23,67 @@ const FEITOS = {
 const GEL_PRECO = 8;
 const CASA_PRECO = 15;
 
-let G = null;
-let hero = 'luisa';
-const HEROS = {
-  luisa: { nome: 'Luísa', cor: '#ff6b9d', emoji: '👧' },
-  bento: { nome: 'Bento', cor: '#2196f3', emoji: '🧒' },
+// --- OS 5 AMIGOS (todos jogáveis; os outros ficam na fogueira) ---
+const BANDO = {
+  max:     { nome: 'Max',     idade: 12, cor: '#ff7043', emoji: '👦', x: 515, y: 460,
+             fala: 'Fala com a Mãe do Max e do Matheus 👩 para começar a nossa aventura!' },
+  noah:    { nome: 'Noah',    idade: 11, cor: '#26c6da', emoji: '🧒', x: 760, y: 432,
+             fala: 'Os arbustos vermelhos têm frutinhas 🫐 deliciosas!' },
+  luiza:   { nome: 'Luiza',   idade: 11, cor: '#ec407a', emoji: '👧', x: 700, y: 568,
+             fala: 'Na cozinha da cabana a gente faz geléia 🍓 e sopa 🍲!' },
+  vitoria: { nome: 'Vitória', idade: 12, cor: '#ab47bc', emoji: '👧', x: 540, y: 568,
+             fala: 'Dê comida aos bichinhos: cada amigo ganha ⭐ e 🪙10!' },
+  matheus: { nome: 'Matheus', idade: 13, cor: '#66bb6a', emoji: '🧑', x: 828, y: 520,
+             fala: 'A GARAGEM 🚗 virou oficina: 2 madeiras 🪵 fazem uma casinha 🐦!' },
 };
+
+// --- AS MÃES (ajudam e dão as missões) ---
+const MAES = [
+  { id: 'maeMax', nome: 'Mãe do Max e do Matheus', idade: 43, emoji: '👩', x: 600, y: 412, cor: '#8d6e63',
+    fala: 'Que bom que vocês chegaram! Vão preparar um piquenique incrível e ainda ajudar os bichinhos da mata! 💚',
+    tip: 'Aqui eu cuido das encomendas: vendo suas GELÉIAS 🍓 por 🪙' + GEL_PRECO + ' e CASINHAS 🐦 por 🪙' + CASA_PRECO + '.' },
+  { id: 'maeNoah', nome: 'Mãe do Noah e da Luiza', idade: 42, emoji: '👩‍🦰', x: 715, y: 552, cor: '#e57373',
+    fala: 'Na cozinha da CABANA 🏕️ fazemos geléia 🍓 de frutinhas e sopa 🍲 quentinha!',
+    tip: 'Receita da Sopa: 1 cogumelo 🍄 + 1 erva 🌿. A geléia leva 3 frutinhas 🫐.' },
+  { id: 'maeVitoria', nome: 'Mãe da Vitória', emoji: '👱‍♀️', x: 470, y: 480, cor: '#9575cd',
+    fala: 'Essa floresta está cheia de amigos! Alimente os bichinhos com carinho e eles vão amar vocês. 💛',
+    tip: 'Cada animal alimentado com a comida certa vira amigo: ⭐ e 🪙10!' },
+];
+
+let G = null;
+let hero = 'max';
 
 function setHero(h) {
   hero = h;
-  document.getElementById('heroSel').innerHTML = 'Herói: <b>' + HEROS[h].nome + '</b>';
-  msg('Você escolheu ' + HEROS[h].nome + '! Clique em Jogar!');
+  document.getElementById('heroSel').innerHTML = 'Herói: <b>' + BANDO[h].nome + '</b>';
+  msg('Você escolheu ' + BANDO[h].nome + '! Clique em Jogar!');
 }
 function msg(t) { msgEl.textContent = t; }
 
 function startGame() {
   G = novoJogo(hero);
   lojaEl.style.display = 'none';
-  msg('Bem-vindo(a) à cabana, ' + HEROS[hero].nome + '! Fale com o Vovô João 👴 (F) para começar a missão.');
+  msg('Bem-vindo(a) à cabana, ' + BANDO[hero].nome + '! Fale com a Mãe do Max e do Matheus 👩 (F) para começar.');
   requestAnimationFrame(loop);
 }
 
 function novoJogo(heroKey) {
+  const b = BANDO[heroKey];
   return {
-    hero: heroKey, amigo: heroKey === 'luisa' ? 'bento' : 'luisa',
-    px: 790, py: 430, vx: 0, vy: 0, dir: -Math.PI / 2,
+    hero: heroKey,
+    px: b.x, py: b.y, vx: 0, vy: 0, dir: -Math.PI / 2,
     energia: 100, moedas: 0, amigos: 0,
     inv: { fruta: 0, cogu: 0, erva: 0, madeira: 0, geleia: 0, casinha: 0, sopa: 0 },
     fed: { pardal: false, esquilo: false, coelho: false, sapo: false, raposa: false },
     casinhaColocada: false,
+    maeFalado: { maeMax: false, maeNoah: false, maeVitoria: false },
     missao: 0, tempo: 0, dia: 0.35, wonAt: -1,
     spTime: COLETA.map(() => -999),
     missoes: [
-      'Fale com o Vovô João 👴 perto da CABANA (aperte F).',
+      'Fale com a Mãe do Max e do Matheus 👩 perto da CABANA (aperte F).',
       'Pegue 3 FRUTINHAS 🫐 nos arbustos vermelhos da floresta.',
       'Faça 1 GELÉIA 🍓 na cozinha da cabana (3 frutinhas).',
-      'Faça 1 CASINHA DE PÁSSARO 🐦 (2 madeiras 🪵) e pendure na árvore do esquilo.',
+      'Na GARAGEM 🚗 faça 1 CASINHA DE PÁSSARO 🐦 (2 madeiras 🪵) e pendure na árvore do esquilo.',
       'Cozinhe SOPA 🍲 (1 cogumelo 🍄 + 1 erva 🌿) e dê para a raposinha 🦊. Você venceu! 🏆',
     ],
   };
@@ -65,20 +91,20 @@ function novoJogo(heroKey) {
 
 // ---- MAPA ----
 const CABANA = { x: 660, y: 220, w: 260, h: 170 };
-const GRANDPA = { x: 615, y: 545, emoji: '👴', nome: 'Vovô João' };
-const CAMPFIRE = { x: 765, y: 480 };
+const GARAGEM = { x: 350, y: 235, w: 210, h: 130 };
+const FOGUEIRA = { x: 610, y: 500 };
 const CASINHA_TREE = { x: 1120, y: 175 };
 
 const COLETA = [
-  { idx: 0, tipo: 'fruta',   nome: 'Arbusto vermelho',    x: 250,  y: 640,  qtd: 2, cd: 8 },
-  { idx: 1, tipo: 'fruta',   nome: 'Arbusto da clareira', x: 1350, y: 430,  qtd: 2, cd: 8 },
-  { idx: 2, tipo: 'fruta',   nome: 'Arbusto da colina',   x: 1320, y: 640,  qtd: 2, cd: 8 },
-  { idx: 3, tipo: 'cogu',    nome: 'Cogumelos do brejo',  x: 280,  y: 1180, qtd: 1, cd: 12 },
-  { idx: 4, tipo: 'cogu',    nome: 'Cogumelos do bosque', x: 900,  y: 1240, qtd: 1, cd: 12 },
-  { idx: 5, tipo: 'cogu',    nome: 'Cogumelos do rochedo', x: 1480, y: 620, qtd: 1, cd: 12 },
-  { idx: 6, tipo: 'erva',    nome: 'Ervas do vale',       x: 320,  y: 900,  qtd: 1, cd: 12 },
-  { idx: 7, tipo: 'erva',    nome: 'Ervas da campina',    x: 1260, y: 850,  qtd: 1, cd: 12 },
-  { idx: 8, tipo: 'madeira', nome: 'Pilha de madeira',    x: 990,  y: 330,  qtd: 1, cd: 12 },
+  { idx: 0, tipo: 'fruta',   nome: 'Arbusto vermelho',     x: 250,  y: 640,  qtd: 2, cd: 8 },
+  { idx: 1, tipo: 'fruta',   nome: 'Arbusto da clareira',  x: 1350, y: 430,  qtd: 2, cd: 8 },
+  { idx: 2, tipo: 'fruta',   nome: 'Arbusto da colina',    x: 1320, y: 640,  qtd: 2, cd: 8 },
+  { idx: 3, tipo: 'cogu',    nome: 'Cogumelos do brejo',   x: 280,  y: 1180, qtd: 1, cd: 12 },
+  { idx: 4, tipo: 'cogu',    nome: 'Cogumelos do bosque',  x: 900,  y: 1240, qtd: 1, cd: 12 },
+  { idx: 5, tipo: 'cogu',    nome: 'Cogumelos do rochedo', x: 1480, y: 620,  qtd: 1, cd: 12 },
+  { idx: 6, tipo: 'erva',    nome: 'Ervas do vale',        x: 320,  y: 900,  qtd: 1, cd: 12 },
+  { idx: 7, tipo: 'erva',    nome: 'Ervas da campina',     x: 1260, y: 850,  qtd: 1, cd: 12 },
+  { idx: 8, tipo: 'madeira', nome: 'Pilha de madeira',     x: 585,  y: 330,  qtd: 1, cd: 12 },
 ];
 
 const ANIMAIS = [
@@ -89,13 +115,14 @@ const ANIMAIS = [
   { id: 'raposa',  nome: 'Raposinha', emoji: '🦊', x: 1560, y: 300,  comida: 'sopa',  pede: 'uma SOPA 🍲 quentinha', fala: 'Obrigada por cuidar de mim. Que a floresta te abrace!' },
 ];
 
-const OBST = [CABANA];
+const OBST = [CABANA, GARAGEM];
 const ARV_SOLIDAS = [
-  { x: 430, y: 300 }, { x: 180, y: 290 }, { x: 300, y: 420 }, { x: 200, y: 540 },
-  { x: 560, y: 130 }, { x: 1240, y: 140 }, { x: 1100, y: 170 },
-  { x: 240, y: 720 }, { x: 340, y: 980 }, { x: 150, y: 1160 }, { x: 260, y: 1310 },
-  { x: 520, y: 1360 }, { x: 1550, y: 1160 }, { x: 1620, y: 700 }, { x: 1410, y: 520 },
-  { x: 1560, y: 450 },
+  { x: 150, y: 250 }, { x: 260, y: 300 }, { x: 120, y: 450 }, { x: 180, y: 590 },
+  { x: 880, y: 130 }, { x: 1050, y: 120 }, { x: 980, y: 300 }, { x: 940, y: 540 },
+  { x: 1280, y: 250 }, { x: 1500, y: 300 }, { x: 1600, y: 420 },
+  { x: 240, y: 780 }, { x: 330, y: 980 }, { x: 150, y: 1210 }, { x: 270, y: 1340 },
+  { x: 520, y: 1390 }, { x: 1550, y: 1180 }, { x: 1620, y: 700 }, { x: 1430, y: 520 },
+  { x: 1560, y: 450 }, { x: 410, y: 1240 }, { x: 1180, y: 600 },
 ];
 const ARV_DECO = [
   { x: 80, y: 140 }, { x: 500, y: 60 }, { x: 1180, y: 60 }, { x: 1500, y: 130 },
@@ -155,17 +182,25 @@ function comer() {
 }
 
 function interagir() {
-  if (pertoP(GRANDPA.x, GRANDPA.y, G.px, G.py, 75)) { abrirVovo(); return; }
+  for (const m of MAES) {
+    if (pertoP(m.x, m.y, G.px, G.py, 75)) { abrirMae(m); return; }
+  }
+  for (const b of Object.keys(BANDO)) {
+    if (b === G.hero) continue;
+    const am = BANDO[b];
+    if (pertoP(am.x, am.y, G.px, G.py, 70)) { msg(am.emoji + ' ' + am.nome + ': ' + am.fala); return; }
+  }
   for (const s of COLETA) {
     if (pertoP(s.x, s.y, G.px, G.py, 85)) { coletar(s); return; }
   }
-  if (inRect(CABANA, G.px, G.py, 22)) { abrirFogao(); return; }
+  if (inRect(CABANA, G.px, G.py, 22)) { abrirCozinha(); return; }
+  if (inRect(GARAGEM, G.px, G.py, 22)) { abrirOficina(); return; }
   if (pertoP(CASINHA_TREE.x, CASINHA_TREE.y, G.px, G.py, 75)) { pendurarCasinha(); return; }
-  if (pertoP(CAMPFIRE.x, CAMPFIRE.y, G.px, G.py, 70)) { msg('🔥 A fogueira aquece! Fique perto dela para recuperar energia.'); return; }
+  if (pertoP(FOGUEIRA.x, FOGUEIRA.y, G.px, G.py, 70)) { msg('🔥 A fogueira aquece a roda de amigos! Fique perto para recuperar energia.'); return; }
   for (const a of ANIMAIS) {
     if (pertoP(a.x, a.y, G.px, G.py, 70)) { alimentar(a); return; }
   }
-  msg('Explore a floresta: arbustos 🫐, cogumelos 🍄, ervas 🌿 e madeira 🪵. Fale com o Vovô João 👴!');
+  msg('Explore a floresta: arbustos 🫐, cogumelos 🍄, ervas 🌿 e madeira 🪵. Fale com as MÃES 👩!');
 }
 
 function coletar(s) {
@@ -176,15 +211,23 @@ function coletar(s) {
   checarMissao();
 }
 
-function abrirVovo() {
-  if (G.missao === 0) {
+function abrirMae(m) {
+  const primeira = !G.maeFalado[m.id];
+  if (primeira) { G.maeFalado[m.id] = true; G.moedas += 5; }
+  if (m.id === 'maeMax' && G.missao === 0) {
     G.missao = 1; G.moedas += 5;
     msg('Missão 1 ok! +🪙5. ' + G.missoes[1]);
   }
-  let html = '<b>👴 ' + GRANDPA.nome + '</b> — Moedas: 🪙' + G.moedas + ' | ⭐ Amigos: ' + G.amigos + '/5<br>';
-  html += '<small>🎯 Missão ' + Math.min(G.missao + 1, 5) + '/5: ' + G.missoes[Math.min(G.missao, G.missoes.length - 1)] + '</small><br>';
-  html += '<button onclick="trocar(\'geleia\')">Vender 1 Geléia 🍓 por 🪙' + GEL_PRECO + '</button>';
-  html += '<button onclick="trocar(\'casinha\')">Vender 1 Casinha 🐦 por 🪙' + CASA_PRECO + '</button>';
+  let html = '<b>' + m.emoji + ' ' + m.nome + '</b>';
+  html += m.idade ? ' (' + m.idade + ' anos) ' : '';
+  html += '— Moedas: 🪙' + G.moedas + ' | ⭐ Amigos: ' + G.amigos + '/5';
+  if (primeira) html += '<br><span style="color:#c62828">💛 Só conhecer vocês já me deixa feliz! +🪙5</span>';
+  html += '<br><small>🎯 Missão ' + Math.min(G.missao + 1, 5) + '/5: ' + G.missoes[Math.min(G.missao, G.missoes.length - 1)] + '</small><br>';
+  html += '<p>' + m.fala + '<br><span style="color:#2e5d1f">' + m.tip + '</span></p>';
+  if (m.id === 'maeMax') {
+    html += '<button onclick="trocar(\'geleia\')">Vender 1 Geléia 🍓 por 🪙' + GEL_PRECO + '</button>';
+    html += '<button onclick="trocar(\'casinha\')">Vender 1 Casinha 🐦 por 🪙' + CASA_PRECO + '</button>';
+  }
   html += '<button onclick="fecharLoja()">Fechar</button>';
   lojaEl.innerHTML = html; lojaEl.style.display = 'block';
 }
@@ -197,17 +240,24 @@ function trocar(chave) {
   }
   G.inv[chave]--;
   G.moedas += preco;
-  msg('Vendeu para o Vovô! +🪙' + preco);
-  abrirVovo();
+  msg('Vendeu para a Mãe do Max e do Matheus! +🪙' + preco);
+  abrirMae(MAES[0]);
 }
 
-function abrirFogao() {
-  let html = '<b>🍳 Cozinha & Oficina da Cabana</b> — Moedas: 🪙' + G.moedas + '<br>';
+function abrirCozinha() {
+  let html = '<b>🍳 Cozinha da Cabana 🏕️</b> — Moedas: 🪙' + G.moedas + '<br>';
   html += '<button onclick="fazer(\'geleia\')">🍓 Geléia (3 🫐)</button>';
-  html += '<button onclick="fazer(\'casinha\')">🐦 Casinha (2 🪵)</button>';
   html += '<button onclick="fazer(\'sopa\')">🍲 Sopa (1 🍄 + 1 🌿)</button>';
   html += '<button onclick="fecharLoja()">Fechar</button>';
-  html += '<br><small>Você tem: 🫐' + G.inv.fruta + ' 🍄' + G.inv.cogu + ' 🌿' + G.inv.erva + ' 🪵' + G.inv.madeira + ' | Feitos: 🍓' + G.inv.geleia + ' 🐦' + G.inv.casinha + ' 🍲' + G.inv.sopa + '</small>';
+  html += '<br><small>Você tem: 🫐' + G.inv.fruta + ' 🍄' + G.inv.cogu + ' 🌿' + G.inv.erva + ' | Feitos: 🍓' + G.inv.geleia + ' 🍲' + G.inv.sopa + '</small>';
+  lojaEl.innerHTML = html; lojaEl.style.display = 'block';
+}
+
+function abrirOficina() {
+  let html = '<b>🚗 Garagem-Oficina</b> — Moedas: 🪙' + G.moedas + '<br>';
+  html += '<button onclick="fazer(\'casinha\')">🐦 Casinha (2 🪵)</button>';
+  html += '<button onclick="fecharLoja()">Fechar</button>';
+  html += '<br><small>Você tem: 🪵' + G.inv.madeira + ' | Feitos: 🐦' + G.inv.casinha + '</small>';
   lojaEl.innerHTML = html; lojaEl.style.display = 'block';
 }
 
@@ -222,13 +272,14 @@ function fazer(chave) {
   for (const req of Object.keys(f.custo)) G.inv[req] -= f.custo[req];
   G.inv[chave]++;
   msg('Criou ' + f.emoji + ' ' + f.nome + '!');
-  checarMissao(); abrirFogao();
+  checarMissao();
+  if (chave === 'casinha') abrirOficina(); else abrirCozinha();
 }
 
 function pendurarCasinha() {
   if (G.casinhaColocada) { msg('A casinha já está na árvore — o Pardal canta feliz! 🐦💚'); return; }
   if (G.inv.casinha <= 0) {
-    msg('Uma árvore perfeita! Pendure uma CASINHA 🐦 (faça com 2 madeiras 🪵 na oficina).');
+    msg('Uma árvore perfeita! Pendure uma CASINHA 🐦 (faça na GARAGEM 🚗 com 2 madeiras 🪵).');
     return;
   }
   G.inv.casinha--;
@@ -242,7 +293,7 @@ function alimentar(a) {
   const f = FEITOS[chave];
   const it = ITENS[chave];
   if (a.id === 'raposa' && G.missao < 4) {
-    msg('🤫 A Raposinha está escondida na toca... ela só aparece para quem completar as missões do Vovô!');
+    msg('🤫 A Raposinha está escondida na toca... ela só aparece para quem completar as missões das mães!');
     return;
   }
   if (G.inv[chave] <= 0) {
@@ -277,7 +328,7 @@ let camX = 0, camY = 0;
 function update(dt) {
   G.tempo += dt; G.dia = (0.35 + G.tempo * 0.004) % 1;
   const correndo = keys['shift'] && G.energia > 0;
-  const pertoFogo = pertoP(CAMPFIRE.x, CAMPFIRE.y, G.px, G.py, 90);
+  const pertoFogo = pertoP(FOGUEIRA.x, FOGUEIRA.y, G.px, G.py, 90);
   const base = correndo ? 3.4 : 2.2;
   if (correndo) G.energia = Math.max(0, G.energia - dt * 5);
   else if (pertoFogo) G.energia = Math.min(100, G.energia + dt * 14);
@@ -334,14 +385,53 @@ function arvore(t, esc) {
 
 function pronto(i, cd) { return G.tempo - G.spTime[i] >= cd; }
 
+function drawCabana() {
+  ctx.fillStyle = 'rgba(0,0,0,0.18)'; ctx.fillRect(CABANA.x + 8, CABANA.y + 10, CABANA.w, CABANA.h);
+  ctx.fillStyle = '#c62828';
+  ctx.beginPath(); ctx.moveTo(CABANA.x - 20, CABANA.y + 20); ctx.lineTo(CABANA.x + CABANA.w / 2, CABANA.y - 25); ctx.lineTo(CABANA.x + CABANA.w + 20, CABANA.y + 20); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#b0713f'; ctx.fillRect(CABANA.x, CABANA.y + 20, CABANA.w, CABANA.h - 20);
+  ctx.strokeStyle = '#4e342e'; ctx.lineWidth = 3; ctx.strokeRect(CABANA.x, CABANA.y + 20, CABANA.w, CABANA.h - 20);
+  ctx.fillStyle = '#5d4037'; ctx.fillRect(CABANA.x + CABANA.w / 2 - 22, CABANA.y + 95, 44, 75);
+  ctx.fillStyle = '#90caf9'; ctx.fillRect(CABANA.x + 24, CABANA.y + 55, 34, 30); ctx.fillRect(CABANA.x + CABANA.w - 58, CABANA.y + 55, 34, 30);
+  ctx.fillStyle = '#fff'; ctx.font = 'bold 15px Arial'; ctx.fillText('🏕️ CABANA', CABANA.x + 88, CABANA.y + 10);
+}
+
+function drawGaragem() {
+  ctx.fillStyle = 'rgba(0,0,0,0.18)'; ctx.fillRect(GARAGEM.x + 8, GARAGEM.y + 10, GARAGEM.w, GARAGEM.h);
+  ctx.fillStyle = '#546e7a';
+  ctx.beginPath(); ctx.moveTo(GARAGEM.x - 14, GARAGEM.y + 14); ctx.lineTo(GARAGEM.x + GARAGEM.w / 2, GARAGEM.y - 16); ctx.lineTo(GARAGEM.x + GARAGEM.w + 14, GARAGEM.y + 14); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#90a4ae'; ctx.fillRect(GARAGEM.x, GARAGEM.y + 14, GARAGEM.w, GARAGEM.h - 14);
+  ctx.strokeStyle = '#37474f'; ctx.lineWidth = 3; ctx.strokeRect(GARAGEM.x, GARAGEM.y + 14, GARAGEM.w, GARAGEM.h - 14);
+  ctx.fillStyle = '#37474f'; ctx.fillRect(GARAGEM.x + 34, GARAGEM.y + 34, 92, 90);
+  ctx.fillStyle = '#263238'; ctx.fillRect(GARAGEM.x + 42, GARAGEM.y + 42, 76, 74);
+  for (let i = 0; i < 2; i++) {
+    ctx.beginPath(); ctx.arc(GARAGEM.x + 62 + i * 40, GARAGEM.y + 116, 8, 0, 7); ctx.strokeStyle = '#78909c'; ctx.lineWidth = 4; ctx.stroke();
+  }
+  ctx.fillStyle = '#ffd54f'; ctx.font = 'bold 13px Arial'; ctx.fillText('🚗 GARAGEM', GARAGEM.x + 62, GARAGEM.y + 5);
+}
+
+function drawFogueira() {
+  for (let i = 0; i < 3; i++) {
+    const a = (i - 1) * 0.5;
+    ctx.fillStyle = '#6d4c41';
+    ctx.fillRect(FOGUEIRA.x + Math.cos(a) * 12 - 4, FOGUEIRA.y + Math.sin(a) * 5, 8, 18);
+  }
+  const fl = Math.sin(G.tempo * 10) * 5;
+  ctx.fillStyle = '#ff8f00';
+  ctx.beginPath(); ctx.moveTo(FOGUEIRA.x, FOGUEIRA.y - 20 - fl); ctx.lineTo(FOGUEIRA.x - 12, FOGUEIRA.y + 2); ctx.lineTo(FOGUEIRA.x + 12, FOGUEIRA.y + 2); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#ffd54f';
+  ctx.beginPath(); ctx.moveTo(FOGUEIRA.x + 2, FOGUEIRA.y - 12 - fl); ctx.lineTo(FOGUEIRA.x - 7, FOGUEIRA.y + 2); ctx.lineTo(FOGUEIRA.x + 7, FOGUEIRA.y + 2); ctx.closePath(); ctx.fill();
+}
+
 function draw() {
   ctx.fillStyle = '#9ed48a'; ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.save(); ctx.translate(-camX, -camY);
 
   // trilhas de terra
-  trilha([[790, 430], [790, 1055]], 46);
-  trilha([[790, 470], [560, 470], [470, 560], [330, 650]], 36);
-  trilha([[790, 500], [1220, 500], [1340, 430]], 36);
+  trilha([[FOGUEIRA.x, 500], [FOGUEIRA.x, 1055]], 46);
+  trilha([[FOGUEIRA.x, 480], [540, 400], [500, 360]], 32);
+  trilha([[FOGUEIRA.x, 515], [520, 600], [340, 640]], 34);
+  trilha([[FOGUEIRA.x, 515], [950, 515], [1290, 430]], 34);
   trilha([[1070, 1085], [1330, 1085], [1400, 1220]], 32);
 
   // rio
@@ -369,7 +459,7 @@ function draw() {
   ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 3;
   ctx.beginPath(); ctx.ellipse(LAGO.x, LAGO.y, LAGO.rx * 0.55, LAGO.ry * 0.45, 0, 0, 7); ctx.stroke();
 
-  // árvores
+  // árvores (mata cerrada)
   ARV_DECO.forEach((t, i) => arvore(t, i % 3 === 0 ? 1.2 : 0.9));
   for (const t of ARV_SOLIDAS) { arvore(t, 1.05); }
 
@@ -412,31 +502,16 @@ function draw() {
   arvore({ x: CASINHA_TREE.x, y: CASINHA_TREE.y }, 1);
   if (G.casinhaColocada) { ctx.font = '22px Arial'; ctx.fillText('🏠', CASINHA_TREE.x + 10, CASINHA_TREE.y - 20); }
 
-  // cabana
-  ctx.fillStyle = 'rgba(0,0,0,0.18)'; ctx.fillRect(CABANA.x + 8, CABANA.y + 10, CABANA.w, CABANA.h);
-  ctx.fillStyle = '#c62828';
-  ctx.beginPath(); ctx.moveTo(CABANA.x - 20, CABANA.y + 20); ctx.lineTo(CABANA.x + CABANA.w / 2, CABANA.y - 25); ctx.lineTo(CABANA.x + CABANA.w + 20, CABANA.y + 20); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = '#b0713f'; ctx.fillRect(CABANA.x, CABANA.y + 20, CABANA.w, CABANA.h - 20);
-  ctx.strokeStyle = '#4e342e'; ctx.lineWidth = 3; ctx.strokeRect(CABANA.x, CABANA.y + 20, CABANA.w, CABANA.h - 20);
-  ctx.fillStyle = '#5d4037'; ctx.fillRect(CABANA.x + CABANA.w / 2 - 22, CABANA.y + 95, 44, 75);
-  ctx.fillStyle = '#90caf9'; ctx.fillRect(CABANA.x + 24, CABANA.y + 55, 34, 30); ctx.fillRect(CABANA.x + CABANA.w - 58, CABANA.y + 55, 34, 30);
-  ctx.fillStyle = '#fff'; ctx.font = 'bold 15px Arial'; ctx.fillText('🏕️ CABANA', CABANA.x + 88, CABANA.y + 10);
+  // cabana + garagem + fogueira
+  drawCabana();
+  drawGaragem();
+  drawFogueira();
 
-  // fogueira
-  for (let i = 0; i < 3; i++) {
-    const a = (i - 1) * 0.5;
-    ctx.fillStyle = '#6d4c41';
-    ctx.fillRect(CAMPFIRE.x + Math.cos(a) * 12 - 4, CAMPFIRE.y + Math.sin(a) * 5, 8, 18);
+  // as mães
+  for (const m of MAES) {
+    ctx.font = '26px Arial'; ctx.fillText(m.emoji, m.x - 13, m.y + 9);
+    ctx.fillStyle = m.cor; ctx.font = 'bold 11px Arial'; ctx.fillText(m.nome, m.x - m.nome.length * 3.5, m.y - 16);
   }
-  const fl = Math.sin(G.tempo * 10) * 5;
-  ctx.fillStyle = '#ff8f00';
-  ctx.beginPath(); ctx.moveTo(CAMPFIRE.x, CAMPFIRE.y - 20 - fl); ctx.lineTo(CAMPFIRE.x - 12, CAMPFIRE.y + 2); ctx.lineTo(CAMPFIRE.x + 12, CAMPFIRE.y + 2); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = '#ffd54f';
-  ctx.beginPath(); ctx.moveTo(CAMPFIRE.x + 2, CAMPFIRE.y - 12 - fl); ctx.lineTo(CAMPFIRE.x - 7, CAMPFIRE.y + 2); ctx.lineTo(CAMPFIRE.x + 7, CAMPFIRE.y + 2); ctx.closePath(); ctx.fill();
-
-  // vovô
-  ctx.font = '26px Arial'; ctx.fillText(GRANDPA.emoji, GRANDPA.x - 13, GRANDPA.y + 9);
-  ctx.fillStyle = '#223'; ctx.font = 'bold 12px Arial'; ctx.fillText(GRANDPA.nome, GRANDPA.x - 33, GRANDPA.y - 16);
 
   // animais
   for (let i = 0; i < ANIMAIS.length; i++) {
@@ -453,15 +528,20 @@ function draw() {
     ctx.fillStyle = '#223'; ctx.font = '11px Arial'; ctx.fillText(a.nome, a.x - (a.nome.length * 3), a.y - 16 + bob);
   }
 
-  // companheiro
-  const fx = G.px - 34, fy = G.py + 10;
-  ctx.font = '22px Arial'; ctx.fillText(HEROS[G.amigo].emoji, fx - 11, fy + 8);
-  ctx.fillStyle = '#223'; ctx.font = '10px Arial'; ctx.fillText(HEROS[G.amigo].nome, fx - 12, fy - 14);
+  // os amigos na fogueira (menos o herói)
+  for (const b of Object.keys(BANDO)) {
+    if (b === G.hero) continue;
+    const am = BANDO[b];
+    const bob = Math.sin(G.tempo * 2 + b.length) * 2;
+    ctx.font = '24px Arial'; ctx.fillText(am.emoji, am.x - 12, am.y + 8 + bob);
+    ctx.fillStyle = am.cor; ctx.font = 'bold 11px Arial'; ctx.fillText(am.nome, am.x - am.nome.length * 3.5, am.y - 16 + bob);
+  }
 
   // jogador
+  const H = BANDO[G.hero];
   ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.beginPath(); ctx.ellipse(G.px, G.py + 12, 12, 5, 0, 0, 7); ctx.fill();
-  ctx.font = '26px Arial'; ctx.fillText(HEROS[G.hero].emoji, G.px - 13, G.py + 9);
-  ctx.fillStyle = HEROS[G.hero].cor; ctx.font = 'bold 11px Arial'; ctx.fillText(HEROS[G.hero].nome, G.px - 12, G.py - 18);
+  ctx.font = '26px Arial'; ctx.fillText(H.emoji, G.px - 13, G.py + 9);
+  ctx.fillStyle = H.cor; ctx.font = 'bold 11px Arial'; ctx.fillText(H.nome, G.px - H.nome.length * 3.5, G.py - 18);
 
   ctx.restore();
 
@@ -470,7 +550,7 @@ function draw() {
   if (noite > 0.03) {
     ctx.fillStyle = 'rgba(10,20,60,' + noite + ')';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    const gx = CAMPFIRE.x - camX, gy = CAMPFIRE.y - camY;
+    const gx = FOGUEIRA.x - camX, gy = FOGUEIRA.y - camY;
     const grad = ctx.createRadialGradient(gx, gy, 10, gx, gy, 260);
     grad.addColorStop(0, 'rgba(255,160,40,0.40)');
     grad.addColorStop(1, 'rgba(255,160,40,0)');
@@ -487,13 +567,14 @@ function draw() {
     ctx.textAlign = 'center';
     ctx.fillText('🏆 VOCÊ VENCEU! 🏆', 480, 262);
     ctx.font = 'bold 18px Arial'; ctx.fillStyle = '#7b5a32';
-    ctx.fillText('A Raposinha está feliz e a floresta te abraça!', 480, 302);
+    ctx.fillText('Max, Noah, Luiza, Vitória e Matheus: a floresta os abraça!', 480, 302);
     ctx.textAlign = 'left';
   }
 }
 
 function drawHUD() {
-  let s = '<span>' + HEROS[G.hero].emoji + ' ' + HEROS[G.hero].nome + ' & ' + HEROS[G.amigo].nome + '</span>';
+  const h = BANDO[G.hero];
+  let s = '<span>' + h.emoji + ' ' + h.nome + ' (grupo na fogueira 🔥)</span>';
   s += '<span>🪙 ' + G.moedas + '</span>';
   s += '<span>⭐ Amigos: ' + G.amigos + '/5</span>';
   s += '<span>⚡ ' + Math.round(G.energia) + '</span>';

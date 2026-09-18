@@ -3,35 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luísa e Bento: A Cabana na Floresta — Jogo para 7 a 15 anos</title>
+<title>Max e Amigos: A Cabana na Floresta — Jogo para 7 a 15 anos</title>
 <style>
   * { box-sizing: border-box; font-family: "Trebuchet MS", Arial, sans-serif; }
   body { margin: 0; background: #d7f0cc; color: #223; display: flex; flex-direction: column; align-items: center; }
   h1 { margin: 10px; font-size: 22px; color: #2e5d1f; }
-  #menu { background: #fff; border: 3px solid #2e7d32; padding: 16px; border-radius: 14px; width: 660px; max-width: 95vw; text-align: center; }
-  #menu button { background: #ffbf3f; border: 2px solid #2e5d1f; padding: 12px 16px; margin: 5px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 15px; }
+  #menu { background: #fff; border: 3px solid #2e7d32; padding: 16px; border-radius: 14px; width: 700px; max-width: 95vw; text-align: center; }
+  #menu button { background: #ffbf3f; border: 2px solid #2e5d1f; padding: 12px 14px; margin: 4px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 14px; }
   #menu button:hover { filter: brightness(1.05); transform: scale(1.03); }
   #hud { width: 960px; max-width: 98vw; display: flex; gap: 8px; flex-wrap: wrap; background: #fff; padding: 8px; border-radius: 12px; margin: 6px 0; font-size: 14px; border: 2px solid #2e7d32; }
   #hud span { background: #eef7ee; padding: 4px 10px; border-radius: 8px; border: 1px solid #c5d7c0; }
   canvas { background: #9ed48a; border: 3px solid #2e7d32; border-radius: 14px; max-width: 98vw; }
   #msg { min-height: 24px; margin: 4px; color: #2e5d1f; font-size: 15px; font-weight: bold; background: #fff; padding: 4px 12px; border-radius: 8px; }
-  #loja { display: none; background: #fff; border: 3px solid #ff8c42; padding: 12px; border-radius: 12px; width: 660px; max-width: 95vw; margin-bottom: 8px; }
+  #loja { display: none; background: #fff; border: 3px solid #ff8c42; padding: 12px; border-radius: 12px; width: 680px; max-width: 95vw; margin-bottom: 8px; }
   #loja button { background: #8ee29b; border: 2px solid #2e5d1f; padding: 8px 10px; margin: 4px; border-radius: 8px; cursor: pointer; font-weight: bold; }
   #help { font-size: 13px; color: #234; max-width: 960px; padding: 0 12px 24px; background: #fff; border-radius: 10px; margin-top: 6px; }
   kbd { background: #2e7d32; color: #fff; padding: 1px 6px; border-radius: 5px; }
 </style>
 </head>
 <body>
-<h1>🏕️ Luísa e Bento: A Cabana na Floresta</h1>
+<h1>🏕️ Max e Amigos: A Cabana na Floresta</h1>
 
 <div id="menu">
   <p><b>1. Escolha seu personagem:</b></p>
-  <button onclick="setHero('luisa')">👧 Luísa</button>
-  <button onclick="setHero('bento')">🧒 Bento</button>
-  <span id="heroSel">Herói: <b>Luísa</b></span>
+  <button onclick="setHero('max')">👦 Max (12)</button>
+  <button onclick="setHero('noah')">🧒 Noah (11)</button>
+  <button onclick="setHero('luiza')">👧 Luiza (11)</button>
+  <button onclick="setHero('vitoria')">👧 Vitória (12)</button>
+  <button onclick="setHero('matheus')">🧑 Matheus (13)</button>
+  <span id="heroSel">Herói: <b>Max</b></span>
   <p><b>2. Começar:</b></p>
-  <button onclick="startGame()">▶️ Jogar na Cabana</button>
-  <p style="font-size:13px">Colete <b>frutinhas, cogumelos, ervas e madeira</b>, cozinhe <b>geléia e sopa</b>, faça <b>casinhas de pássaro</b> e ajude os animais da floresta. Sem violência — só natureza e amizade! Idade: 7 a 15 anos.</p>
+  <button onclick="startGame()">▶️ Aventura na Cabana</button>
+  <p style="font-size:13px">Cinco amigos numa cabana na floresta! Colete <b>frutinhas, cogumelos, ervas e madeira</b>, faça <b>geléia 🍓, sopa 🍲 e casinhas de pássaro 🐦</b> na garagem-oficina 🚗 e ajude os animais. Sem violência — só natureza e amizade! Idade: 7 a 15 anos.</p>
 </div>
 
 <div id="hud"></div>
@@ -42,7 +45,7 @@
 <div id="help">
   <b>Como jogar:</b> <kbd>WASD</kbd> / setas andar | <kbd>Shift</kbd> correr | <kbd>E</kbd> comer (energia) |
   <kbd>F</kbd> falar / coletar / cozinhar / pendurar / dar comida | <kbd>M</kbd> missão atual<br>
-  💡 Dica: fale com o <b>Vovô João 👴</b>, colete nos arbustos vermelhos 🫐 e faça comidinhas na cabana. Complete as 5 missões e faça amizade com 5 animais!
+  💡 Dica: fale com as <b>MÃES 👩</b> e com os amigos à beira da <b>fogueira 🔥</b>, colete nos arbustos vermelhos 🫐 e prepare comidinhas. Complete as 5 missões e faça amizade com 5 animais!
 </div>
 
 <script src="game.js"></script>
